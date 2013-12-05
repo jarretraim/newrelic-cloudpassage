@@ -16,6 +16,9 @@ newrelic:
 # Agent Configuration:
 #
 agents:
-  # this is where configuration for agents belongs
+  cloudpassage:
+    client_id: <client-id>
+    client_secret: <client-secret>
+  
   example:
     hertz: 1000

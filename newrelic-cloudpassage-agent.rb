@@ -2,8 +2,8 @@
 
 require "rubygems"
 require "bundler/setup"
-
 require "newrelic_plugin"
+require "cloudpassage"
 
 module ExampleAgent
 
@@ -14,6 +14,8 @@ module ExampleAgent
     agent_config_options :hertz  # frequency of the periodic functions
     agent_human_labels("Example Agent") { "Synthetic example data" }
 
+    halo = CloudPassage::Halo.new()
+
     def poll_cycle
       x = Time.now.to_f * hertz * Math::PI * 2
       report_metric "SIN",     "Value", Math.sin(x) + 1.0
@@ -23,17 +25,12 @@ module ExampleAgent
 
   end
 
-  #
   # Register this agent with the component.
   # The ExampleAgent is the name of the module that defines this
   # driver (the module must contain at least three classes - a
   # PollCycle, a Metric and an Agent class, as defined above).
-  #
   NewRelic::Plugin::Setup.install_agent :example, ExampleAgent
 
-  #
   # Launch the agent; this never returns.
-  #
   NewRelic::Plugin::Run.setup_and_run
-
 end
