@@ -12,22 +12,21 @@ class Halo
 
   HALO_URI = "https://api.cloudpassage.com/v1/"
 
-
 	def initialize
     @log = Logger.new(STDOUT)
     @log.level = Logger::DEBUG
 
 		settings = YAML.load_file("config/newrelic_plugin.yml")
-		@client_id = settings['agents']['cloudpassage']['client_id']
-		@client_secret = settings['agents']['cloudpassage']['client_secret']
+		@client_id = settings['agents']['cloud_passage']['client_id']
+		@client_secret = settings['agents']['cloud_passage']['client_secret']
 	end
 
-  def list_events(since=Time.now, event_types=[])
+  def events(since=Time.now, event_types=[])
+    params = {:since => since.utc().iso8601()}
+
     if event_types.length > 0
       types = event_types.join(',')
-      params = {:since => since.to_s, :type => types}
-    else
-      params = {:since => since.to_s}
+      params = params.merge({:type => types})
     end
 
     response = request("events", params)
@@ -68,6 +67,7 @@ class Halo
     end
 
     @log.debug ("Performing api call to: #{uri}")
+    params = params.merge({:per_page => 100})
     @log.debug("Params: #{params}")
 
     begin

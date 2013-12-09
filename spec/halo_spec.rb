@@ -32,14 +32,14 @@ describe Halo do
   describe "events" do
     it "pulls events for default parameters" do
       halo = Halo.new
-      events = halo.list_events()
+      events = halo.events()
 
       events.should_not be nil
     end
 
     it "pulls some guaranteed events when passed a start time" do
       halo = Halo.new
-      events = halo.list_events(Time.new("2013-12-01"))
+      events = halo.events(Time.new("2013-12-01"))
       events.length().should be > 0
     end
   end
